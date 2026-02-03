@@ -135,10 +135,8 @@ def create_ics(terms, filename="solar_terms.ics"):
         e.description = f"{name} 精確時間: {dt_tpe.strftime('%Y-%m-%d %H:%M:%S')} (UTC+8)"
         c.events.add(e)
         
-    with open(filename, 'w', encoding='utf-8', newline='') as f:
-        # ics library serializes with \r\n, but opening in 'w' on Windows might interfere.
-        # newline='' ensures Python doesn't translate \n to \r\n again.
-        f.write(c.serialize())
+    with open(filename, 'wb') as f:
+        f.write(c.serialize().encode('utf-8'))
 
 if __name__ == "__main__":
     today = datetime.now()
