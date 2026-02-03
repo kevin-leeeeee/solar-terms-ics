@@ -73,8 +73,8 @@ def generate_terms(years):
     while current_date < end_date:
         next_date = current_date + timedelta(days=1)
         
-        jd_start = ephem.julian_date(current_date)
-        jd_end = ephem.julian_date(next_date)
+        jd_start = ephem.Date(current_date)
+        jd_end = ephem.Date(next_date)
         
         lon_start = get_ecliptic_lon(jd_start)
         lon_end = get_ecliptic_lon(jd_end)
