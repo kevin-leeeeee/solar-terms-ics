@@ -114,29 +114,43 @@ def generate_terms(years):
     return terms_found
 
 def create_ics(terms, filename="solar_terms.ics"):
-    c = Calendar()
-    c.creator = "Antigravity/SolarTermsGen"
+    lines = [
+        "BEGIN:VCALENDAR",
+        "VERSION:2.0",
+        "PRODID:-//Antigravity//Solar Terms//ZH",
+        "METHOD:PUBLISH",
+        "X-WR-CALNAME:24節氣",
+        "X-WR-TIMEZONE:Asia/Taipei"
+    ]
     
-    tz_tpe = pytz.timezone('Asia/Taipei')
-    
+    import uuid
     for name, dt_utc in terms:
-        # dt_utc is naive, but it is UTC.
-        # Make it aware
-        dt_aware = pytz.utc.localize(dt_utc)
+        # Generate uid
+        uid = str(uuid.uuid4())
         
-        # Convert to TPE for description (optional), but ICS event should be accurate
+        # Format dates for ICS (All day)
+        # We use the date in Asia/Taipei timezone
+        tz_tpe = pytz.timezone('Asia/Taipei')
+        dt_aware = pytz.utc.localize(dt_utc)
         dt_tpe = dt_aware.astimezone(tz_tpe)
         
-        e = Event()
-        e.name = name
-        e.begin = dt_tpe.date() # Use local date for all-day event
-        e.make_all_day()
+        date_str = dt_tpe.strftime('%Y%m%d')
+        exact_time = dt_tpe.strftime('%Y-%m-%d %H:%M:%S')
         
-        e.description = f"{name} 精確時間: {dt_tpe.strftime('%Y-%m-%d %H:%M:%S')} (UTC+8)"
-        c.events.add(e)
+        lines.append("BEGIN:VEVENT")
+        lines.append(f"UID:{uid}")
+        lines.append(f"DTSTAMP:{datetime.utcnow().strftime('%Y%m%dT%H%M%SZ')}")
+        lines.append(f"DTSTART;VALUE=DATE:{date_str}")
+        lines.append(f"SUMMARY:{name}")
+        lines.append(f"DESCRIPTION:{name} 精確時間: {exact_time} (UTC+8)")
+        lines.append("END:VEVENT")
         
+    lines.append("END:VCALENDAR")
+    
+    # Write with explicit CRLF
     with open(filename, 'wb') as f:
-        f.write(c.serialize().encode('utf-8'))
+        content = "\r\n".join(lines) + "\r\n"
+        f.write(content.encode('utf-8'))
 
 if __name__ == "__main__":
     today = datetime.now()
