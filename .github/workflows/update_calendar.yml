@@ -1,0 +1,34 @@
+name: Update Solar Terms ICS
+
+on:
+  schedule:
+    - cron: '0 0 1 1 *' # Run at 00:00 on Jan 1st every year
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  update-calendar:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.x'
+          
+      - name: Install dependencies
+        run: |
+          pip install -r requirements.txt
+          
+      - name: Generate ICS
+        run: python main.py
+        
+      - name: Commit and push changes
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: "Auto-update solar terms ICS for next 2 years"
+          file_pattern: "solar_terms.ics"
