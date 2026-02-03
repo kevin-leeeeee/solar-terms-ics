@@ -129,15 +129,10 @@ def create_ics(terms, filename="solar_terms.ics"):
         
         e = Event()
         e.name = name
-        e.begin = dt_aware
-        # Duration: 0? Or 1 hour? Usually instantaneous, but convenient to have a block
-        # Solar terms are events. Let's make it 0 duration or all day?
-        # User asked for "subscription", usually nice to see exact time.
-        # Let's make it an instantaneous event (duration 0)
-        # Or maybe 1 minute.
-        e.duration = timedelta(minutes=0)
+        e.begin = dt_tpe.date() # Use local date for all-day event
+        e.make_all_day()
         
-        e.description = f"{name} - {dt_tpe.strftime('%Y-%m-%d %H:%M:%S')} (UTC+8)"
+        e.description = f"{name} 精確時間: {dt_tpe.strftime('%Y-%m-%d %H:%M:%S')} (UTC+8)"
         c.events.add(e)
         
     with open(filename, 'w', encoding='utf-8') as f:
