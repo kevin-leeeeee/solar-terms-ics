@@ -7,7 +7,7 @@
 
 請使用以下連結訂閱行事曆（複製連結並在 Google Calendar / Apple Calendar 中透過 URL 新增）：
 
-**[https://raw.githubusercontent.com/keveeeeee/solar-terms-ics/master/solar_terms.ics](https://raw.githubusercontent.com/keveeeeee/solar-terms-ics/master/solar_terms.ics)**
+**[https://raw.githubusercontent.com/kevin-leeeeee/solar-terms-ics/master/solar_terms.ics](https://raw.githubusercontent.com/kevin-leeeeee/solar-terms-ics/master/solar_terms.ics)**
 
 *(請將 `<YOUR_USERNAME>` 替換為您的 GitHub 使用者名稱)*
 
