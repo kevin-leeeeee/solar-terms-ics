@@ -23,7 +23,10 @@ def get_ecliptic_lon(jd):
     """Get geocentric ecliptic longitude of the sun at julian date jd."""
     s = ephem.Sun()
     s.compute(jd)
-    e = ephem.Ecliptic(s)
+    # Create Equatorial coordinate with epoch of date (jd)
+    # This accounts for precession since J2000
+    eq = ephem.Equatorial(s.ra, s.dec, epoch=jd)
+    e = ephem.Ecliptic(eq)
     return e.lon # in radians
 
 def find_term_time(start_jd, end_jd, target_degrees):
